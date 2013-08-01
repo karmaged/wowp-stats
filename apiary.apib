@@ -1,0 +1,140 @@
+HOST: http://wowp-stats.cloudry.io/
+
+--- WoWP API ---
+
+---
+World of Warplanes Tracker Web App API documentation
+---
+
+--
+Private API
+The following is a section of resources related to the Private API
+--
+
+Private API | Request type 'short'
+
+GET /user-info?type=short&username=user_name
+< 200
+< Content-Type: application/json
+{
+    "account_url": "http://worldofwarplanes.ru/community/accounts/98786789-user_name/",
+    "abbreviation": "",
+    "exp": 234987,
+    "name": user_name,
+    "clan_url": "",
+    "wins": 100,
+    "id": 98786789,
+    "battles": 500
+}
+
+Private API | Request type 'full'
+
+GET /user-info?type=full&username=user_name
+< 200
+< Content-Type: application/json
+{
+  "battle_stats": {
+    "average_destroyed": {
+      "name": " Уничтожено объектов, средн. за бой",
+      "value": "0.29"
+    },
+    "average_helped": {
+      "name": " Помощь в уничтожении самолётов, средн. за бой",
+      "value": "0.17"
+    },
+    "average_killed": {
+      "name": " Сбито самолётов, средн. за бой",
+      "value": "0.78"
+    },
+    "helped_kill": {
+      "name": " Помощь в уничтожении самолётов",
+      "value": "53"
+    },
+    "max_destroyed": {
+      "name": " Уничтожено объектов, макс. за бой",
+      "value": "11"
+    },
+    "max_help": {
+      "name": " Помощь в уничтожении самолётов, макс. за бой",
+      "value": "2"
+    },
+    "max_killed": {
+      "name": " Сбито самолётов, макс. за бой",
+      "value": "7"
+    },
+    "objects_destroyed": {
+      "name": " Уничтожено объектов",
+      "value": "93"
+    },
+    "players_killed": {
+      "name": " Сбито самолётов ",
+      "value": "247"
+    }
+  },
+  "nations": {
+    "germany": {
+      "name": "Германия",
+      "value": "0(0%)"
+    },
+    "japan": {
+      "name": "Япония",
+      "value": "0(0%)"
+    },
+    "usa": {
+      "name": "США",
+      "value": "0(0%)"
+    },
+    "ussr": {
+      "name": "СССР",
+      "value": "316(100%)"
+    }
+  },
+  "planes_types": {
+    "ground_attack": {
+      "name": "Штурмовики",
+      "value": "126(40%)"
+    },
+    "heavy_fighter": {
+      "name": "Тяжёлые истребители",
+      "value": "0(0%)"
+    },
+    "light_fighter": {
+      "name": "Лёгкие истребители",
+      "value": "190(60%)"
+    },
+    "navy_fighter": {
+      "name": "Палубные истребители",
+      "value": "0(0%)"
+    }
+  },
+  "summary": {
+    "average_exp": {
+      "name": " Средний опыт за бой",
+      "value": "277"
+    },
+    "defeat": {
+      "name": " Поражений",
+      "value": "49%"
+    },
+    "draw": {
+      "name": " Ничьих",
+      "value": "1%"
+    },
+    "max_exp": {
+      "name": " Максимальный опыт за бой",
+      "value": "1479"
+    },
+    "played": {
+      "name": " Проведено боёв",
+      "value": "316"
+    },
+    "survived": {
+      "name": " Выжил в боях",
+      "value": "16%"
+    },
+    "won": {
+      "name": " Побед",
+      "value": "50%"
+    }
+  }
+}
