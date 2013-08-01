@@ -14,6 +14,7 @@ var userProvider = new UserProvider();
 app.use(express.bodyParser());
 app.use(express.cookieParser(settings.cookie_secret_key));
 
+// API auth goes here
 
 // API router
 app.get('/user-info', function (req, res) {
