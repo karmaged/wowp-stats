@@ -17,6 +17,12 @@ require.config({
         'jquery'
       ],
       exports: 'Backstretch'
+    },
+    'cookie': {
+      deps: [
+        'jquery'
+      ],
+      exports: 'Cookie'
     }
   },
   paths: {
@@ -24,6 +30,7 @@ require.config({
     'backstretch': '../components/jquery-backstretch/jquery.backstretch',
     'underscore': '../components/underscore-amd/underscore',
     'backbone': '../components/backbone-amd/backbone',
+    'cookie': '../components/jquery.cookie/jquery.cookie',
     'swiffy': './swiffy',
     'loader': './loader',
 

@@ -9,6 +9,11 @@ var Cluster = require('cluster2'),
 // Create API module
 var userProvider = new UserProvider();
 
+// Configure server
+app.use(express.bodyParser());
+app.use(express.cookieParser('that is our secret in here...'));
+
+
 // API router
 app.get('/user-info', function (req, res) {
   var type = req.query.type,
@@ -24,6 +29,7 @@ app.get('/user-info', function (req, res) {
         res.send(404, err);
       } else {
         userProvider.getUserInfo(username, data[0].id, function (error, userdata) {
+          res.cookie('wowp_username', username, {expires: new Date(Date.now() + 2592000000)});
           res.send(userdata);
         });
       }

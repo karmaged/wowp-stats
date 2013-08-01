@@ -5,13 +5,14 @@ define([
   'underscore',
   'backbone',
   'vm',
+  'cookie',
   'pos',
   'models/user',
   'text!templates/layout.html',
   'views/info',
   'swiffy',
   'loader'
-], function ($, _, Backbone, Vm, pos, UserModel, LayoutTemplate, InfoView) {
+], function ($, _, Backbone, Vm, cookie, pos, UserModel, LayoutTemplate, InfoView) {
   var LayoutView = Backbone.View.extend({
     el: '.application',
     model: new UserModel(),
@@ -27,7 +28,12 @@ define([
       loaderObj = new swiffy.Stage(loader[0], loaderJSON);
       loaderObj.start();
 
-      form.fadeIn(500);
+      if (!!$.cookie('wowp_username')) {
+        this.submit(null, $.cookie('wowp_username'));
+      } else {
+        form.fadeIn(500);
+      }
+
       pos([form, loader]);
 
       form.find('input').focus();
@@ -77,15 +83,24 @@ define([
         pos([form, loader]);
       });
     },
-    submit: function (e) {
-      e.preventDefault();
+    submit: function (e, username) {
+      var back, form, type, input, value, toFadeOut;
 
-      var form = $(e.target),
-          loader = this.loader,
+      if (e !== null) {
+        e.preventDefault();
+
+        form = $(e.target);
+        type = form.hasClass('search-small');
+        input = this.input = form.find('input');
+        value = input.val().length;
+        toFadeOut = form;
+      } else {
+        back = true;
+        value = 1;
+      }
+
+      var loader = this.loader,
           info = this.$el.find('.info'),
-          type = form.hasClass('search-small'),
-          input = this.input = form.find('input'),
-          toFadeOut = form,
           self = this,
           username;
 
@@ -93,14 +108,18 @@ define([
         toFadeOut = info;
       }
 
-      if (input.val().length === 0) {
+      if (value === 0) {
         input[0].placeholder = 'введите имя пользователя';
       } else {
-        username = input.val().replace(/\W/g, '');
-        toFadeOut.fadeOut(100, function() {
+        if (!back) {
+          username = input.val().replace(/\W/g, '');
+          toFadeOut.fadeOut(100, function() {
+            loader.fadeIn(100);
+            pos([form, loader]);
+          });
+        } else {
           loader.fadeIn(100);
-          pos([form, loader]);
-        });
+        }
 
         this.model.getURL(username);
 
