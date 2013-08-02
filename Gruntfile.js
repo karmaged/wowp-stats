@@ -165,7 +165,7 @@ module.exports = function(grunt) {
         },
         {
           expand: true,
-          src: ['app.js', 'package.json', 'nginx.conf'],
+          src: ['app.js', 'package.json', 'nginx.conf', 'settings.js'],
           dest: 'dist'
         },
         {
