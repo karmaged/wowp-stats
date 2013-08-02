@@ -4,14 +4,15 @@
 var Cluster = require('cluster2'),
     express = require('express'),
     app = express(),
-    UserProvider = require('./modules/user-provider').userProvider;
+    UserProvider = require('./modules/user-provider').userProvider,
+    settings = require('./settings');
 
 // Create API module
 var userProvider = new UserProvider();
 
 // Configure server
 app.use(express.bodyParser());
-app.use(express.cookieParser('that is our secret in here...'));
+app.use(express.cookieParser(settings.cookie_secret_key));
 
 
 // API router
@@ -39,8 +40,8 @@ app.get('/user-info', function (req, res) {
 
 // Create cluster
 var c = new Cluster({
-    port: 8100,
-    host: '127.0.0.1'
+  host: settings.address,
+  port: settings.port
 });
 
 // Start server
