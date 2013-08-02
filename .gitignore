@@ -5,6 +5,6 @@ Thumbs.db
 dist
 node_modules
 public/components
-./public/css
-./logs
-./pids
+public/css/
+logs
+pids

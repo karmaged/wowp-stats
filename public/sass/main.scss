@@ -15,6 +15,14 @@ h1 {
     margin: 10px 0 0;
   }
 }
+a {
+  text-decoration: none;
+  color: #aaa;
+
+  &:hover {
+    color: #fafafa;
+  }
+}
 html,
 body,
 .application {
@@ -119,14 +127,17 @@ body,
   font-size: 10px;
   text-shadow: 1px 1px #000;
   text-align: center;
-  margin: -20px auto 0;
-  position: relative;
-  width: 100px;
+  margin: -40px 0 0;
 
   ul {
     list-style: none;
     margin: 0;
     padding: 0;
+  }
+  .version {
+    width: 100px;
+    margin: 0 auto;
+    position: relative;
   }
   .current-v > span {
     cursor: pointer;
