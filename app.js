@@ -22,11 +22,15 @@ app.get('/user-info', function (req, res) {
 
   if (type === 'short') {
     userProvider.searchByName(username, function (err, data) {
-      res.send(data);
+      if (err) {
+        res.send(404, err);
+      } else {
+        res.send(data);
+      }
     });
   } else if (type === 'full') {
     userProvider.searchByName(username, function (err, data) {
-      if (err !== null) {
+      if (err) {
         res.send(404, err);
       } else {
         userProvider.getUserInfo(username, data[0].id, function (error, userdata) {
