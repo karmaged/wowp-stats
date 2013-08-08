@@ -7,6 +7,9 @@
 ::-webkit-scrollbar {
   display: none;
 }
+.clear {
+  clear: both;
+}
 h1 {
   font-size: 20px;
   margin: 30px 0 0;
@@ -27,6 +30,9 @@ html,
 body,
 .application {
   height: 100%;
+}
+body {
+  text-shadow: 1px 1px #000;
 }
 .main {
   min-height: 100%;
@@ -72,16 +78,89 @@ body,
     outline: none;
   }
 }
-.search-small input {
-  width: 440px;
-  margin: 10px 0 0;
-  padding: 2px 10px;
-  height: 26px;
-  border-radius: 3px;
-  outline: none;
-  font-size: 16px;
-  box-shadow: 0 1px rgba(white,.3);
-  border: 1px solid #000;
+.search-small {
+
+  input[type="search"] {
+    width: 360px;
+    margin: 10px 0 0;
+    padding: 2px 10px;
+    height: 26px;
+    border-radius: 3px;
+    outline: none;
+    font-size: 16px;
+    box-shadow: 0 1px rgba(white,.3);
+    border: 1px solid #000;
+    float: left;
+  }
+  .compare {
+    height: 24px;
+    width: 71px;
+    background: #1d2022;
+    float: left;
+    margin: 10px 0 0 5px;
+    border-radius: 3px;
+    border: 1px solid #000;
+    box-shadow: 0 1px rgba(white, 0.3), inset 0 1px 1px #111;
+    float: left;
+    font-size: 13px;
+    text-align: center;
+    padding: 6px 0 0;
+    color: #777;
+    cursor: pointer;
+    position: relative;
+
+    &::before,
+    &::after {
+      @include transition(opacity 100ms ease-in-out);
+      position: absolute;
+      opacity: 0;
+      z-index: 99;
+    }
+    &::before {
+      content: '';
+      width: 0;
+      height: 0;
+      border-top: 7px solid transparent;
+      border-bottom: 7px solid transparent;
+      border-right: 9px solid #202020;
+      right: -32px;
+      top: 7px;
+    }
+    &::after {
+      content: attr(data-title);
+      color: #fafafa;
+      font-size: 10px;
+      background: rgba(black,.8);
+      display: block;
+      padding: 5px;
+      border-radius: 4px;
+      width: 100px;
+      top: -10px;
+      left: 103px;
+      text-shadow: 1px 1px black;
+    }
+    &:hover::before,
+    &:hover::after {
+      opacity: 1;
+    }
+    &.active {
+      background: #36AF4E;
+      border: 1px solid #07290A;
+      box-shadow: inset 0 1px rgba(white,.3), 0 0.5px 1px #222, inset 0 -2px rgba(black,.2);
+      color: #D3FFCD;
+      text-shadow: 1px 1px #437247;
+
+      &:hover {
+        background: #40C55A;
+      }
+      &::before {
+        border-right-color: #000;
+      }
+    }
+    &:hover {
+      background: #1C311E;
+    }
+  }
 }
 .loader {
   position: absolute;
@@ -93,39 +172,64 @@ body,
     background: transparent !important;
   }
 }
-.username {
-  font-size: 30px;
-  text-align: center;
-}
 .info {
-  background: url(../img/infobg.jpg), #242424;
   color: #fafafa;
   font-size: 12px;
-  width: 460px;
   margin: 60px auto 100px;
-  padding: 4px 15px 10px;
-  border-radius: 4px;
-  border: 1px solid #000;
-  box-shadow: inset 0 1px rgba(white,.4), 0 2px 4px rgba(black,.6);
+  width: 492px;
+  position: relative;
 
   ul {
     list-style: none;
     margin: 0;
     padding: 0;
   }
-  .item {
+  .section-main .item,
+  .section-compare .item {
     margin: 6px 0;
+  }
+  .section-main .table .item {
     border-bottom: 1px dotted #666;
     padding: 0 0 2px;
+
+    .value {
+      float: right;
+    }
   }
-  .value {
-    float: right;
+}
+.section-main {
+  background: url(http://wowp-stats.cloudry.io/img/infobg.jpg), #242424;
+  width: 460px;
+  padding: 4px 15px 10px;
+  border-radius: 4px;
+  border: 1px solid #000;
+  box-shadow: inset 0 1px rgba(white,.4), 0 2px 4px rgba(black,.6);
+
+  .username {
+    font-size: 30px;
+    text-align: center;
+    position: relative;
+
+    &::before,
+    &:after {
+      content: '';
+      position: absolute;
+      width: 15px;
+      height: 14px;
+      background: url(../img/bullet.png);
+    }
+    &::before {
+      top: 0;
+      left: 30px;
+    }
+    &::after {
+      margin: 0 0 0 15px;
+    }
   }
 }
 .footer {
   color: #fafafa;
   font-size: 10px;
-  text-shadow: 1px 1px #000;
   text-align: center;
   margin: -40px 0 0;
 
@@ -175,9 +279,110 @@ body,
       padding: 2px 0;
 
       p {
-        line-height: .5em;
-        margin: 1em 0;
+        line-height: 1.2em;
+        margin: 3px 0;
       }
     }
+  }
+}
+.section-main ul.someter {
+  margin: 20px 0 0;
+  background: #1d2022;
+  padding: 10px 5px;
+  border-radius: 4px;
+  box-shadow: 0 1px #333, inset 0 1px 1px #101010;
+
+  .item {
+    display: block;
+    float: left;
+    width: 33.33%;
+    height: 60px;
+    text-align: center;
+
+    span {
+      display: block;
+    }
+    .label {
+      font-size: 13px;
+      font-weight: bold;
+      color: #ccc;
+    }
+    .value {
+      font-size: 36px;
+      font-weight: bold;
+      background-image: url(../img/speedometr-param.png);
+      background-repeat: no-repeat;
+      padding: 0 0 0 25px;
+      height: 44px;
+
+      &.small {
+        font-size: 26px;
+        padding: 7px 0 0 6px;
+      }
+    }
+    &:first-child {
+      .label {
+        text-align: left;
+        padding: 0 0 0 10px;
+      }
+      .value {
+        background-position: 10px -5px;
+      }
+    }
+    &:nth-child(2) .value {
+      background-position: 10px -52px;
+    }
+    &:nth-child(3) .value {
+      background-position: 10px -104px;
+    }
+  }
+}
+.section-compare {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  z-index: -99;
+  width: 210px;
+  background: url(http://wowp-stats.cloudry.io/img/infobg.jpg), #242424;
+  border-radius: 4px;
+  border: 1px solid #000;
+  box-shadow: inset 0 1px rgba(white,.4), 0 2px 4px rgba(black,.6);
+  @include transition(right 400ms ease-in-out);
+
+  &.active {
+    right: -200px;
+  }
+  .item {
+    padding: 0 0 2px 25px;
+  }
+  .username {
+    text-align: center;
+    font-size: 16px;
+  }
+  ul.someter {
+    margin: 10px auto 0 17px;
+    background: #1d2022;
+    padding: 10px 5px;
+    border-radius: 4px;
+    box-shadow: 0 1px #333, inset 0 1px 1px #101010;
+    width: 176px;
+
+    .item {
+      padding: 0 4px;
+    }
+    .value {
+      float: right;
+    }
+  }
+  .table .item {
+    border-bottom: 1px dotted #666;
+  }
+  .summary.table {
+    margin: 151px 0 0;
+  }
+  .battle_stats.table,
+  .types.table,
+  .nations.table {
+    margin: 61px 0 0;
   }
 }

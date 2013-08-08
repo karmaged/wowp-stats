@@ -10,9 +10,10 @@ define([
   'models/user',
   'text!templates/layout.html',
   'views/info',
+  'events',
   'swiffy',
   'loader'
-], function ($, _, Backbone, Vm, cookie, pos, UserModel, LayoutTemplate, InfoView) {
+], function ($, _, Backbone, Vm, cookie, pos, UserModel, LayoutTemplate, InfoView, vent) {
   var LayoutView = Backbone.View.extend({
     el: '.application',
     model: new UserModel(),
@@ -60,37 +61,62 @@ define([
     },
     build: function (username) {
       var self = this;
-      var infoView = Vm.create({}, 'InfoView', InfoView, {model: this.model, username: username});
+      var compare = $('.btn.compare').hasClass('active');
+      var update = false;
 
-      setTimeout(function() {
+      if (!!compare) {
+        if (!!$('.section-compare').hasClass('active')) {
+          update = true;
+        }
         setTimeout(function() {
-          infoView.render();
-        }, 200);
+          setTimeout(function() {
+            vent.trigger('compare', {model: self.model, username: username, update: update});
+          });
 
-        self.loader.fadeOut(100);
-        self.form.find('input').val('');
-      }, 500);
+          self.loader.fadeOut(100);
+          $('.search-small input').val('');
+        }, 500);
+      } else {
+        var infoView = Vm.create({}, 'InfoView', InfoView, {model: this.model, username: username});
+
+        setTimeout(function() {
+          setTimeout(function() {
+            infoView.render();
+          }, 200);
+
+          self.loader.fadeOut(100);
+          self.form.find('input').val('');
+        }, 500);
+      }
     },
     onerror: function() {
       var form = this.form,
           loader = this.loader,
-          input = this.$el.find('.search-form input');
+          input,
+          self = this;
 
+      if (!!this.type) {
+        form = $('.info');
+      }
+      input = form.find('input');
       input.val('');
       input[0].placeholder = 'такого пользователя нет в системе';
       loader.fadeOut(100, function() {
         form.fadeIn(100);
-        pos([form, loader]);
+        if (!self.type) {
+          pos([form, loader]);
+        }
       });
     },
     submit: function (e, username) {
-      var back, form, type, input, value, toFadeOut;
+      var back, form, type, input, value, toFadeOut, compare;
 
       if (e !== null) {
         e.preventDefault();
 
         form = $(e.target);
-        type = form.hasClass('search-small');
+        this.type = type = form.hasClass('search-small');
+        compare = $('.btn.compare').hasClass('active');
         input = this.input = form.find('input');
         value = input.val().length;
         toFadeOut = form;
@@ -101,7 +127,6 @@ define([
 
       var loader = this.loader,
           info = this.$el.find('.info'),
-          self = this,
           username;
 
       if (!!type) {
@@ -113,10 +138,15 @@ define([
       } else {
         if (!back) {
           username = input.val().replace(/\W/g, '');
-          toFadeOut.fadeOut(100, function() {
+          if (!!compare) {
             loader.fadeIn(100);
             pos([form, loader]);
-          });
+          } else {
+            toFadeOut.fadeOut(100, function() {
+              loader.fadeIn(100);
+              pos([form, loader]);
+            });
+          }
         } else {
           loader.fadeIn(100);
         }
@@ -135,6 +165,7 @@ define([
 
             this.build(username);
           }
+          $.cookie('wowp_username', username, {expires: new Date(Date.now() + 2592000000)});
         }
       }
     }
