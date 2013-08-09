@@ -36,6 +36,6 @@ var Cl = new Cluster({
 });
 
 Cl.listen(function(cb) {
-  cb(app);
+  cb(App);
 });
 
