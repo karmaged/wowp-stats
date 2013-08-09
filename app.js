@@ -3,7 +3,7 @@
 // Require some modules
 var Cluster = require('cluster2'),
     Express = require('express'),
-    UserProvider = require('./modules/user-provider').userProvider,
+    UserProvider = require('./modules/user-provider'),
     Settings = require('./settings');
 
 
