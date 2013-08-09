@@ -45,10 +45,8 @@ exports.getFullInfo = function(username, cb) {
 function _getUserInfo(username, type, cb) {
   Redis.hmget(username, type, function(err, data) {
     if (err) {
-      console.log(err);
       cb(err, null);
     } else {
-      console.log(data);
       cb(null, JSON.parse(data[0]));
     }
   });
