@@ -10,7 +10,8 @@
     "phantom": "~0.5.x",
     "cluster2": "*",
     "redis": "*",
-    "hiredis": "*"
+    "hiredis": "*",
+    "jsdom": "~0.8.3"
   },
   "devDependencies": {
     "matchdep": "~0.1.2",
