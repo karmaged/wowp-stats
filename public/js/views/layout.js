@@ -165,8 +165,8 @@ define([
 
             this.build(username);
           }
-          $.cookie('wowp_username', username, {expires: new Date(Date.now() + 2592000000)});
         }
+        $.cookie('wowp_username', username, {expires: new Date(Date.now() + 2592000000)});
       }
     }
   });
