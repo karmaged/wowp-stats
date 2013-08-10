@@ -11,6 +11,7 @@ module.exports = function(grunt) {
       },
       all: [
         'Gruntfile.js',
+        '.temp/{,*/}*.js',
         'public/js/{,*/}*.js',
         '!public/js/vendor/*'
       ]
@@ -21,7 +22,23 @@ module.exports = function(grunt) {
       },
       dev: {
         options: {
-          script: 'app.js'
+          script: './.temp/app.js'
+        }
+      }
+    },
+    coffee: {
+      dev: {
+        files: {
+          '.temp/settings.js': './settings.coffee',
+          '.temp/app.js': './app.coffee',
+          '.temp/modules/user-provider.js': './modules/user-provider.coffee'
+        }
+      },
+      dist: {
+        files: {
+          '.temp/settings.js': './settings.coffee',
+          '.temp/app.js': './app.coffee',
+          '.temp/modules/user-provider.js': './modules/user-provider.coffee'
         }
       }
     },
@@ -44,9 +61,8 @@ module.exports = function(grunt) {
     watch: {
       express: {
         files: [
-          'app.js',
-          'modules/{,*/}*.js',
-          'public/js/**/{,*/}*.js'
+          './.temp/*.js',
+          './.temp/modules/{,*/}*.js'
         ],
         tasks: ['express:dev'],
         options: {
@@ -68,6 +84,14 @@ module.exports = function(grunt) {
       compass: {
         files: ['public/sass/{,*/}*.{scss,sass}'],
         tasks: ['compass:dev']
+      },
+      coffee: {
+        files: [
+          'app.coffee',
+          'settings.coffee',
+          'modules/{,*/}*.coffee'
+        ],
+        tasks: ['coffee:dev']
       }
     },
     compass: {
@@ -93,8 +117,15 @@ module.exports = function(grunt) {
       }
     },
     clean: {
-      dev: ['public/css'],
-      dist: ['public/css', 'dist/*']
+      dev: [
+        'public/css',
+        './.temp'
+      ],
+      dist: [
+        'public/css',
+        './.temp',
+        'dist'
+      ]
     },
     requirejs: {
       dist: {
@@ -165,12 +196,18 @@ module.exports = function(grunt) {
         },
         {
           expand: true,
-          src: ['app.js', 'package.json', 'nginx.conf', 'settings.js'],
+          src: ['package.json', 'nginx.conf'],
           dest: 'dist'
         },
         {
           expand: true,
-          cwd: 'modules',
+          cwd: '.temp/',
+          src: ['*.js'],
+          dest: 'dist'
+        },
+        {
+          expand: true,
+          cwd: '.temp/modules',
           src: ['*.js'],
           dest: 'dist/modules'
         },
@@ -195,6 +232,7 @@ module.exports = function(grunt) {
   grunt.registerTask('build', [
     'clean:dist',
     'compass:dist',
+    'coffee:dist',
     'useminPrepare',
     'requirejs',
     'imagemin',
@@ -209,6 +247,7 @@ module.exports = function(grunt) {
   grunt.registerTask('server', [
     'clean:dev',
     'compass:dev',
+    'coffee:dev',
     'concurrent:server'
   ]);
 
